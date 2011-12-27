@@ -79,6 +79,8 @@ module ResqueSpec
   end
 
   def perform_or_store(queue_name, payload)
+    encoded_args = MultiJson.encode payload[:args]
+    payload[:args] = encoded_args
     if inline
       perform(queue_name, payload)
     else
@@ -87,8 +89,6 @@ module ResqueSpec
   end
 
   def store(queue_name, payload)
-    encoded_args = MultiJson.encode payload[:args]
-    payload[:args] = encoded_args
     queue_by_name(queue_name) << payload
   end
 
